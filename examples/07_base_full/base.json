@@ -3,7 +3,7 @@
   "domain": "my_domain",
   "owner": "platform-team",
   "vendor": "synopsys",
-  "tool": "formality",
+  "tool": "my_tool",
   "description": "Full base with all three sections — files, procedures, and stages. Maximum control: files define the inclusion boundary, procs control granular trimming, and stages drive run-file and stack generation.",
   "files": {
     "include": [

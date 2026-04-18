@@ -56,35 +56,35 @@ When stages are defined in a base or feature JSON, Chopper can generate run scri
 
 | JSON field | Stack line | Example |
 |------------|-----------|---------|
-| `name` | `N <name>` | `N fev_fm_lite` |
-| `command` | `J <command>` | `J -xt vw Ifev_fm_shell -B BLOCK -T fev_fm_lite` |
+| `name` | `N <name>` | `N run_analysis` |
+| `command` | `J <command>` | `J -tool run_script -B BLOCK -T run_analysis` |
 | `exit_codes` | `L <codes>` | `L 0 3 5` |
-| `dependencies` | `D <deps>` | `D fev_fm_lite` |
+| `dependencies` | `D <deps>` | `D run_analysis` |
 | `inputs` | `I <artifact>` | `I $ward/runs/BLOCK/TECH/release/latest/finish/design.v.gz` |
-| `outputs` | `O <artifact>` | `O $ward/runs/BLOCK/TECH/fev_formality/fm_eco/outputs/fm_eco_region.frd` |
+| `outputs` | `O <artifact>` | `O $ward/runs/BLOCK/TECH/my_domain/outputs/result.rpt` |
 
 **Example — direct translation from stack file to JSON stage:**
 
-Stack file (`fev_fm_lite.stack`):
+Stack file (`run_analysis.stack`):
 ```
-N fev_fm_lite
-J -xt vw Ifev_fm_shell -B BLOCK -T fev_fm_lite
+N run_analysis
+J -tool run_script -B BLOCK -T run_analysis
 L 0 3 5
 D
 
-N promote_fev_fm_lite
-J vw $ward/global/snps/fev_formality/promote.tcl -B BLOCK -T fev_fm_lite -force
-D fev_fm_lite
+N promote_run_analysis
+J tool_wrapper $ward/global/my_domain/promote.tcl -B BLOCK -T run_analysis -force
+D run_analysis
 ```
 
 Equivalent JSON stage definition:
 ```json
 {
-  "name": "fev_fm_lite",
+  "name": "run_analysis",
   "load_from": "",
-  "command": "-xt vw Ifev_fm_shell -B BLOCK -T fev_fm_lite",
+  "command": "-tool run_script -B BLOCK -T run_analysis",
   "exit_codes": [0, 3, 5],
-  "steps": ["source default_fm_procs.tcl", "run_formality_verify"]
+  "steps": ["source core_procs.tcl", "run_verify"]
 }
 ```
 
@@ -103,7 +103,7 @@ Equivalent JSON stage definition:
 ```json
 {
   "$schema": "chopper/base/v1",
-  "domain": "fev_formality",
+  "domain": "my_domain",
   "files": {
     "include": ["setup.tcl"]
   }
@@ -120,10 +120,10 @@ Equivalent JSON stage definition:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `$schema` | `"chopper/base/v1"` | Yes | Schema identifier (literal string) |
-| `domain` | string | Yes | Domain directory name (e.g., `fev_formality`) |
+| `domain` | string | Yes | Domain directory name (e.g., `my_domain`) |
 | `owner` | string | No | Team responsible for this base |
 | `vendor` | string | No | Vendor (e.g., `synopsys`, `cadence`) |
-| `tool` | string | No | Tool name (e.g., `formality`, `primetime`) |
+| `tool` | string | No | Tool name (e.g., `primetime`, `innovus`) |
 | `description` | string | No | Human-readable summary |
 | `_draft` | boolean | No | `true` = machine-generated, not yet curated. Default: `false` |
 | `options.cross_validate` | boolean | No | Cross-validate F3 output. Default: `true` |
@@ -152,19 +152,19 @@ Equivalent JSON stage definition:
 
 ```json
 {
-  "name": "fev_fm_rtl2gate",
+  "name": "run_analysis",
   "load_from": "",
-  "command": "-xt vw Ifev_fm_shell -B BLOCK -T fev_fm_rtl2gate",
+  "command": "-tool run_script -B BLOCK -T run_analysis",
   "exit_codes": [0, 3, 5],
   "dependencies": ["setup"],
   "inputs": ["$ward/runs/BLOCK/TECH/release/latest/finish/design.v.gz"],
-  "outputs": ["$ward/runs/BLOCK/TECH/fev_formality/outputs/result.rpt"],
+  "outputs": ["$ward/runs/BLOCK/TECH/my_domain/outputs/result.rpt"],
   "run_mode": "serial",
   "language": "tcl",
   "steps": [
-    "source default_fm_procs.tcl",
-    "setup_formality_env",
-    "run_formality_verify"
+    "source core_procs.tcl",
+    "setup_env",
+    "run_verify"
   ]
 }
 ```
@@ -243,8 +243,8 @@ Equivalent JSON stage definition:
 {
   "$schema": "chopper/project/v1",
   "project": "PROJECT_ABC",
-  "domain": "fev_formality",
-  "base": "fev_formality/chopper/base.json"
+  "domain": "my_domain",
+  "base": "my_domain/chopper/base.json"
 }
 ```
 

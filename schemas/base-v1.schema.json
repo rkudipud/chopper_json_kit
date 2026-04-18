@@ -14,7 +14,7 @@
     "domain": {
       "type": "string",
       "minLength": 1,
-      "description": "Domain directory name (e.g., fev_formality, sta_pt, power)"
+      "description": "Domain directory name (e.g., my_domain, sta_pt, power)"
     },
     "owner": {
       "type": "string",
@@ -170,7 +170,7 @@
         "command": {
           "type": "string",
           "minLength": 1,
-          "description": "Execution command for the stage. Becomes the `J` line in the generated stack file (for example `J -xt vw Ifev_fm_shell -B BLOCK -T fev_fm_lite`)."
+          "description": "Execution command for the stage. Becomes the `J` line in the generated stack file (for example `J -tool run_script -B BLOCK -T stage_name`)."
         },
         "inputs": {
           "type": "array",

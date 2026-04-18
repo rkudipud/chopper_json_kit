@@ -45,8 +45,7 @@ standalone_json_kit/
 │   ├── 08_base_plus_one_feature/    ← base + one feature + project
 │   ├── 09_base_plus_multiple_features/ ← base + two independent features + project
 │   ├── 10_chained_features_depends_on/ ← three-level depends_on chain + project
-│   ├── 11_project_base_only/        ← base-only trim (no features)
-│   └── 12_fev_formality_domain/     ← Real-world example: Synopsys Formality FEV
+│   └── 11_project_base_only/        ← base-only trim (no features)
 └── agent/
     └── DOMAIN_ANALYZER.md           ← Agent instructions for codebase analysis and JSON authoring
 ```
@@ -66,7 +65,6 @@ standalone_json_kit/
 | Single optional feature | `examples/08_base_plus_one_feature/` |
 | Multiple independent features | `examples/09_base_plus_multiple_features/` |
 | Features depend on each other | `examples/10_chained_features_depends_on/` |
-| Real EDA domain (Formality-style) | `examples/12_fev_formality_domain/` |
 
 ### 2. Copy and adapt
 
@@ -80,7 +78,9 @@ cd my_domain/chopper/
 
 ```bash
 pip install jsonschema
-python - <<'EOF'
+```
+
+```python
 import json, jsonschema, pathlib
 
 schema_dir = pathlib.Path("standalone_json_kit/schemas")
@@ -99,7 +99,7 @@ for f in pathlib.Path("my_domain").rglob("*.json"):
             print(f"OK  {f}")
         except jsonschema.ValidationError as e:
             print(f"ERR {f}: {e.message}")
-EOF
+
 ```
 
 ### 4. Use the domain analyzer agent
@@ -112,25 +112,9 @@ The agent follows an 8-phase process: inventory → stack extraction → proc ex
 
 ---
 
-## Adapting from `fev_formality` to Your Domain
-
-The `examples/12_fev_formality_domain/` example directly reflects the `fev_formality` codebase. Here is how the method generalizes:
-
-| fev_formality pattern | Your domain equivalent |
-|----------------------|----------------------|
-| `default_fm_procs.tcl` | Your domain's core proc library |
-| `*.stack` files with `N/J/L/D/I/O` | Your tool's job scheduler stack format |
-| `prepare_fev_formality.tcl` | Your domain's environment setup script |
-| `fev_fm_eco.stack` (optional flow) | Any optional flow → goes in a feature |
-| `fev_fm_lite.stack` (lightweight variant) | Any variant flow → goes in a feature |
-| `promote.tcl` (post-run artifact push) | Your domain's artifact promotion script |
-| `utils/targ_synth/` (optional helper) | Any optional utility → `files.exclude` in base or omit |
-
----
-
 ## Where to Put Your JSON Files
 
-Convention (following the `fev_formality` model):
+Convention:
 
 ```
 <domain_root>/
