@@ -140,7 +140,7 @@ python -m pip install jsonschema
 
 ### Agent setup options
 
-1. **Copilot coding agent / cloud agent setup**
+1. **GitHub Copilot coding agent / cloud agent setup**
    - Keep repository `AGENTS.md` at repo root.
    - Keep protocol file at `agent/DOMAIN_ANALYZER.md`.
    - In the task prompt, point the agent to your domain root and expected output JSON locations.
