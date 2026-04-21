@@ -25,9 +25,12 @@ You author these JSONs now. When Chopper is released, you run `chopper trim --pr
 ## Package Contents
 
 ```
-standalone_json_kit/
+chopper_json_kit/
 ├── README.md                        ← You are here
+├── AGENTS.md                        ← Agent profile and behavior contract for assistants
 ├── VERSION.txt                      ← Schema version tracking
+├── setup.csh                        ← tcsh/csh environment bootstrap (primary path)
+├── setup.ps1                        ← PowerShell environment bootstrap
 ├── validate_jsons.py                ← One-command schema validation helper
 ├── schemas/
 │   ├── base-v1.schema.json          ← Base JSON schema (authoritative validator)
@@ -105,13 +108,59 @@ python validate_jsons.py my_domain/chopper/
 
 The script validates Base/Feature/Project JSONs based on `$schema`, prints clear `OK/ERR/SKIP` lines, and returns non-zero on validation failures.
 
-### 4. Use the domain analyzer agent
+### 4. Set up and use the domain analyzer agent
 
-Open `agent/DOMAIN_ANALYZER.md` in your AI assistant (Copilot, Claude, etc.) as a system prompt or instruction file. Then ask:
+Use both files below in your assistant:
+- `AGENTS.md` for high-level agent profile and repository-specific rules
+- `agent/DOMAIN_ANALYZER.md` for the full 8-phase domain analysis protocol
+
+Then ask:
 
 > "Analyze my domain directory at `my_domain/` and help me author the base, feature, and project JSONs."
 
 The agent follows an 8-phase process: inventory → stack extraction → proc extraction → base/feature split → authoring → validation.
+
+### 5. Validate using the Python validator (`validate_jsons.py`)
+
+```bash
+python validate_jsons.py
+python validate_jsons.py examples/08_base_plus_one_feature/
+python validate_jsons.py my_domain/chopper/
+```
+
+If `jsonschema` is missing:
+
+```bash
+python -m pip install jsonschema
+```
+
+---
+
+## Agent Setup and Conversational Workflow
+
+### Agent setup options
+
+1. **Copilot coding agent / cloud agent setup**
+   - Keep repository `AGENTS.md` at repo root.
+   - Keep protocol file at `agent/DOMAIN_ANALYZER.md`.
+   - In the task prompt, point the agent to your domain root and expected output JSON locations.
+
+2. **Chat assistant setup (manual)**
+   - Paste `AGENTS.md` as system-level instructions.
+   - Paste or attach `agent/DOMAIN_ANALYZER.md` as the domain-analysis playbook.
+   - Provide the domain boundary and file inventory before asking for final JSON authoring.
+
+### Conversational facilities (collaborative mode)
+
+The agent is designed to work interactively, not as a blind one-shot generator. Expected checkpoints:
+
+1. Confirm domain boundary (where analysis is allowed).
+2. Confirm top-level entry files/procs for call-tree roots.
+3. Review inventory classification (core vs optional vs deprecated).
+4. Review proc trace log (roots, edges, unresolved calls, coverage).
+5. Confirm include/exclude recommendations before final JSON writing.
+
+This conversational loop improves accuracy for `files.include`, `files.exclude`, `procedures.include`, and `procedures.exclude`.
 
 ---
 
