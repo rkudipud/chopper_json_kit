@@ -243,7 +243,7 @@ Equivalent JSON stage definition:
   "$schema": "chopper/project/v1",
   "project": "PROJECT_ABC",
   "domain": "my_domain",
-  "base": "my_domain/jsons/base.json"
+  "base": "jsons/base.json"
 }
 ```
 
@@ -647,9 +647,9 @@ Validate using Python:
 import json
 import jsonschema
 
-with open("json_kit/schemas/base-v1.schema.json") as sf:
+with open("schemas/base-v1.schema.json") as sf:
     schema = json.load(sf)
-with open("my_domain/jsons/base.json") as f:
+with open("jsons/base.json") as f:
     instance = json.load(f)
 
 jsonschema.validate(instance, schema)  # raises if invalid
@@ -661,7 +661,7 @@ Or validate all three together:
 ```python
 import json, jsonschema, pathlib
 
-schema_dir = pathlib.Path("standalone_json_kit/schemas")
+schema_dir = pathlib.Path("schemas")  # relative to chopper_json_kit repo root
 schemas = {
     "chopper/base/v1":    json.load(open(schema_dir / "base-v1.schema.json")),
     "chopper/feature/v1": json.load(open(schema_dir / "feature-v1.schema.json")),
