@@ -55,8 +55,7 @@ endif
 
 echo "[4/4] Installing dependencies..."
 pip install --upgrade pip --quiet
-# Repository docs require jsonschema for local schema validation examples.
-pip install jsonschema --quiet
+pip install -r "$script_dir/requirements.txt" --quiet
 
 echo ""
 echo "=== Setup complete ==="

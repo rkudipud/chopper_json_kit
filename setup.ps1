@@ -70,8 +70,7 @@ if (-not $NoProxy) {
 
 Write-Host "[4/4] Installing dependencies..." -ForegroundColor Yellow
 python -m pip install --upgrade pip --quiet
-# Repository docs require jsonschema for local schema validation examples.
-python -m pip install jsonschema --quiet
+python -m pip install -r (Join-Path $scriptDir "requirements.txt") --quiet
 
 Write-Host ""
 Write-Host "=== Setup complete ===" -ForegroundColor Green
